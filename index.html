@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZBoy's Shopping</title>
+    <style>
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #f5f6f8;
+            --accent: #222;
+            --card-bg: #ffffff;
+            --muted: #9aa0a6;
+            --cta-bg: #111;
+            --cta-fg: #fff;
+            --gap: 16px;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: var(--bg);
+            color: var(--accent);
+        }
+
+        body {
+            padding-top: 60px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-left: 12px;
+            z-index: 20;
+        }
+
+        .header_title_link,
+        .header_title_link:visited,
+        .header_title_link:hover,
+        .header_title_link:active {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .header_title {
+            color: #fff;
+            font-size: 18px;
+            margin: 0;
+            line-height: 1.1;
+            max-width: 90px;
+            text-align: center;
+            white-space: normal;
+        }
+
+        nav {
+            flex: 1;
+            padding-right: 12px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            gap: 12px;
+        }
+
+        .header_button,
+        .header_button:visited,
+        .header_button:hover,
+        .header_button:active {
+            background-color: #fff;
+            border-radius: 4px;
+            padding: 8px 16px;
+            color: #222;
+            text-decoration: none;
+            font-size: 16px;
+            display: inline-block;
+        }
+
+        main {
+            width: 100%;
+            max-width: 1200px;
+            margin: 24px auto;
+            padding: 0 16px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .hero-cta {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .cta-card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            background: linear-gradient(90deg, #fff 0%, #fafafa 100%);
+            border-radius: 10px;
+            padding: 14px;
+            box-shadow: 0 6px 18px rgba(15, 15, 15, 0.2);
+            align-items: center;
+        }
+
+        .cta-content {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .cta-text {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-left: 12px;
+        }
+
+        .cta-text h2 {
+            margin: 0;
+            font-size: 20px;
+            color: var(--accent);
+        }
+
+        .cta-text p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .cta-button {
+            background: var(--cta-bg);
+            color: var(--cta-fg);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .categories {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .category {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .category h3 {
+            margin: 0;
+            font-size: 18px;
+            color: var(--accent);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+        }
+
+        .product-card {
+            display: flex;
+            flex-direction: column;
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 6px 18px rgba(15, 15, 15, 0.1);
+            transition: transform .12s ease, box-shadow .12s ease;
+            position: relative;
+            min-height: auto;
+        }
+
+        .product-image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            flex-shrink: 0;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .product-card:focus,
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 14px 32px rgba(15, 15, 15, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 160px;
+            display: block;
+            position: relative;
+            background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.03) 0 6px, rgba(0, 0, 0, 0.01) 6px 12px);
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .product-footer {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 40px;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 30%, rgba(0, 0, 0, 0.45) 60%, rgba(0, 0, 0, 0.6) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 12px;
+            box-sizing: border-box;
+            color: #fff;
+            gap: 8px;
+        }
+
+        .product-footer .product-name {
+            font-size: 13px;
+            color: #fff;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: calc(100% - 72px);
+        }
+
+        .product-footer .product-price {
+            font-size: 13px;
+            color: #fff;
+            font-weight: 700;
+            flex: 0 0 auto;
+            margin-left: 8px;
+        }
+
+        .see-more {
+            text-decoration: none;
+            background: transparent;
+            color: var(--accent);
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-weight: 600;
+            border: 1px solid rgba(0, 0, 0, 0.5);
+            display: inline-block;
+        }
+
+        footer.page-footer {
+            background-color: var(--accent);
+            color: #fff;
+            padding: 16px 24px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 520px) {
+            .product-image {
+                height: 140px;
+            }
+
+            .product-card {
+                min-height: 198px;
+            }
+
+            .header_title {
+                max-width: 74px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <a href="index.html" class="header_title_link">
+            <h1 class="header_title">ZBoy's<br>Shopping</h1>
+        </a>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="header_button">Home</a></li>
+                <li><a href="products.html" class="header_button">Products</a></li>
+                <li><a href="shoppingcart.html" class="header_button">Shopping Cart</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero-cta">
+            <a href="products.html" class="cta-card" aria-label="Shop now and get 20 percent off">
+                <div class="cta-content">
+                    <div class="cta-text">
+                        <h2>Get 20% off on your first order!</h2>
+                    </div>
+                    <button class="cta-button">Shop Now</button>
+                </div>
+            </a>
+        </section>
+
+        <section class="categories">
+            <article class="category">
+                <h2>Most Popular</h2>
+                <div class="products-grid">
+                    <article class="product-card">
+                        <a href="product.html?id=1">
+                            <figure class="product-image">
+                                <img src="images/product.png" alt="Product 1 image">
+                            </figure>
+                            <figcaption class="product-footer">
+                                <h3 class="product-name">Product 1</h3>
+                                <p class="product-price">€x.xx</p>
+                            </figcaption>
+                        </a>
+                    </article>
+
+                    <article class="product-card">
+                        <a href="product.html?id=2">
+                            <figure class="product-image">
+                                <img src="images/product.png" alt="Product 2 image">
+                            </figure>
+                            <figcaption class="product-footer">
+                                <h3 class="product-name">Product 2</h3>
+                                <p class="product-price">€x.xx</p>
+                            </figcaption>
+                        </a>
+                    </article>
+
+                    <article class="product-card">
+                        <a href="product.html?id=3">
+                            <figure class="product-image">
+                                <img src="images/product.png" alt="Product 3 image">
+                            </figure>
+                            <figcaption class="product-footer">
+                                <h3 class="product-name">Product 3</h3>
+                                <p class="product-price">€x.xx</p>
+                            </figcaption>
+                        </a>
+                    </article>
+
+                    <article class="product-card">
+                        <a href="product.html?id=4">
+                            <figure class="product-image">
+                                <img src="images/product.png" alt="Product 4 image">
+                            </figure>
+                            <figcaption class="product-footer">
+                                <h3 class="product-name">Product 4</h3>
+                                <p class="product-price">€x.xx</p>
+                            </figcaption>
+                        </a>
+                    </article>
+                </div>
+                <div class="section-footer">
+                    <a class="see-more" href="products.html">View all popular</a>
+                </div>
+            </article>
+
+            <article class="category">
+                <h2>New Arrivals</h2>
+                <div class="products-grid">
+                    <article class="product-card">
+                        <a href="product.html?id=11">
+                            <figure class="product-image">
+                                <img src="images/product.png" alt="Product 11 image">
+                            </figure>
+                            <figcaption class="product-footer">
+                                <h3 class="product-name">Product 11</h3>
+                                <p class="product-price">€x.xx</p>
+                            </figcaption>
+                        </a>
+                    </article>
+
+                    <article class="product-card">
+                        <a href="product.html?id=12">
+                            <figure class="product-image">
+                                <img src="images/product.png" alt="Product 12 image">
+                            </figure>
+                            <figcaption class="product-footer">
+                                <h3 class="product-name">Product 12</h3>
+                                <p class="product-price">€x.xx</p>
+                            </figcaption>
+                        </a>
+                    </article>
+                </div>
+                <div class="section-footer">
+                    <a class="see-more" href="products.html">View all new</a>
+                </div>
+            </article>
+
+            <article class="category">
+                <h2>Budget Picks</h2>
+                <div class="products-grid">
+                    <article class="product-card">
+                        <a href="product.html?id=21">
+                            <figure class="product-image">
+                                <img src="images/product.png" alt="Product 21 image">
+                            </figure>
+                            <figcaption class="product-footer">
+                                <h3 class="product-name">Product 21</h3>
+                                <p class="product-price">€x.xx</p>
+                            </figcaption>
+                        </a>
+                    </article>
+
+                    <article class="product-card">
+                        <a href="product.html?id=22">
+                            <figure class="product-image">
+                                <img src="images/product.png" alt="Product 22 image">
+                            </figure>
+                            <figcaption class="product-footer">
+                                <h3 class="product-name">Product 22</h3>
+                                <p class="product-price">€x.xx</p>
+                            </figcaption>
+                        </a>
+                    </article>
+                </div>
+                <div class="section-footer">
+                    <a class="see-more" href="products.html">View all budget</a>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer class="page-footer">
+        <p>&copy; 2026 ZBoy Inc. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>
