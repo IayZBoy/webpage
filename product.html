@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product — ZBoy's Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    @font-face {
+      font-family: "Winner Sans Bold";
+      src: url("./images/winner-sans-bold.otf") format("opentype");
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    :root {
+      --bg: #080b10;
+      --bg2: #0d1117;
+      --bg3: #131920;
+      --surface: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.07);
+      --border-accent: rgba(0, 212, 255, 0.3);
+      --accent: #00d4ff;
+      --accent-glow: rgba(0, 212, 255, 0.15);
+      --text: #f0f4f8;
+      --text2: #8ba0b4;
+      --text3: #4a6070;
+      --green: #00e599;
+      --red: #ff4757;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 0 2rem;
+      height: 64px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      background: rgba(8, 11, 16, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: "Winner Sans Bold", sans-serif;
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      justify-self: start;
+    }
+
+    .nav-logo span {
+      color: var(--accent);
+    }
+
+    .nav-logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+      font-weight: 800;
+      color: var(--bg);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      list-style: none;
+      justify-self: center;
+    }
+
+    .nav-links a {
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.5rem 0.875rem;
+      border-radius: 8px;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      background: var(--surface);
+    }
+
+    .nav-cart {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.5rem 1rem;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: border-color 0.2s, background 0.2s;
+      justify-self: end;
+    }
+
+    .nav-cart:hover {
+      border-color: var(--border-accent);
+      background: var(--accent-glow);
+    }
+
+    .cart-badge {
+      background: var(--accent);
+      color: var(--bg);
+      font-size: 0.625rem;
+      font-weight: 700;
+      border-radius: 6px;
+      padding: 1px 5px;
+      font-family: 'DM Mono', monospace;
+      display: none;
+    }
+
+    .cart-badge.visible {
+      display: inline;
+    }
+
+    /* BREADCRUMB */
+    .breadcrumb {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 100px 2rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8125rem;
+      color: var(--text3);
+      position: relative;
+      z-index: 1;
+    }
+
+    .breadcrumb a {
+      color: var(--text3);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--accent);
+    }
+
+    .breadcrumb span {
+      color: var(--text2);
+    }
+
+    /* PRODUCT PAGE LAYOUT */
+    .product-page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 2rem 6rem;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* LEFT */
+    .product-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .main-image {
+      width: 100%;
+      aspect-ratio: 16/10;
+      background: linear-gradient(135deg, var(--bg3) 0%, rgba(0, 212, 255, 0.06) 100%);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .main-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .main-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 60%, rgba(8, 11, 16, 0.6));
+    }
+
+    .accent-line {
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      border-radius: 1px;
+      opacity: 0.5;
+    }
+
+    /* DETAILS */
+    .product-details {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      position: sticky;
+      top: 84px;
+      height: fit-content;
+    }
+
+    .product-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tag {
+      font-size: 0.67rem;
+      font-weight: 600;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.5rem;
+      border-radius: 5px;
+    }
+
+    .tag-category {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text3);
+    }
+
+    .tag-status-ok {
+      background: rgba(0, 229, 153, 0.1);
+      color: var(--green);
+    }
+
+    .product-title {
+      font-family: "Winner Sans Bold", sans-serif;
+      font-size: 1.875rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      margin-bottom: 0.75rem;
+    }
+
+    .product-short-desc {
+      color: var(--text2);
+      font-size: 0.9375rem;
+      line-height: 1.65;
+      margin-bottom: 1.5rem;
+    }
+
+    .price-block {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: rgba(0, 212, 255, 0.04);
+      border: 1px solid var(--border-accent);
+      border-radius: 10px;
+    }
+
+    .price-main {
+      font-family: 'DM Mono', monospace;
+      font-size: 2rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .price-note {
+      font-size: 0.8rem;
+      color: var(--text3);
+    }
+
+    /* QTY */
+    .qty-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .qty-label {
+      font-size: 0.875rem;
+      color: var(--text2);
+      font-weight: 500;
+      flex: 1;
+    }
+
+    .qty-control {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .qty-btn {
+      background: var(--surface);
+      border: none;
+      color: var(--text);
+      width: 36px;
+      height: 36px;
+      font-size: 1.125rem;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .qty-btn:hover {
+      background: var(--surface-hover, rgba(255, 255, 255, 0.08));
+    }
+
+    .qty-input {
+      background: transparent;
+      border: none;
+      color: var(--text);
+      width: 48px;
+      height: 36px;
+      text-align: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.9375rem;
+      outline: none;
+      appearance: textfield;
+      -moz-appearance: textfield;
+    }
+
+    .qty-input::-webkit-outer-spin-button,
+    .qty-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+    }
+
+    .btn-add-cart {
+      width: 100%;
+      background: var(--accent);
+      color: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.875rem;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .btn-add-cart:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+
+    .btn-add-cart:active {
+      transform: translateY(0);
+    }
+
+    .btn-view-cart {
+      width: 100%;
+      background: transparent;
+      color: var(--text2);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      font-size: 0.875rem;
+      padding: 0.75rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-view-cart:hover {
+      color: var(--text);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    /* FEATURES */
+    .features-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 1.5rem 0;
+    }
+
+    .features-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+    }
+
+    .features-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      font-size: 0.875rem;
+      color: var(--text2);
+    }
+
+    .feature-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(0, 229, 153, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--green);
+    }
+
+    /* DESCRIPTION */
+    .product-info {
+      margin-top: 2rem;
+    }
+
+    .info-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .info-tab {
+      background: none;
+      border: none;
+      color: var(--text3);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.75rem 1.25rem;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.15s;
+    }
+
+    .info-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .info-tab:hover:not(.active) {
+      color: var(--text2);
+    }
+
+    .info-panel {
+      display: none;
+    }
+
+    .info-panel.active {
+      display: block;
+    }
+
+    .info-panel h3 {
+      font-family: "Winner Sans Bold", sans-serif;
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+
+    .info-panel p {
+      color: var(--text2);
+      line-height: 1.7;
+      font-size: 0.9375rem;
+      margin-bottom: 1rem;
+    }
+
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .spec-table tr {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .spec-table td {
+      padding: 0.75rem 0;
+      font-size: 0.875rem;
+    }
+
+    .spec-table td:first-child {
+      color: var(--text3);
+      width: 40%;
+    }
+
+    .spec-table td:last-child {
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8rem;
+    }
+
+    /* SIMILAR */
+    .similar-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem 5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .similar-section h2 {
+      font-family: "Winner Sans Bold", sans-serif;
+      font-size: 1.375rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    .similar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .sim-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, transform 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sim-card:hover {
+      border-color: var(--border-accent);
+      transform: translateY(-3px);
+    }
+
+    .sim-image-wrap {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--bg3);
+      overflow: hidden;
+    }
+
+    .sim-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .sim-body {
+      padding: 0.75rem;
+    }
+
+    .sim-name {
+      font-family: "Winner Sans Bold", sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .sim-price {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.875rem;
+      color: var(--accent);
+    }
+
+    #toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--bg3);
+      border: 1px solid var(--border-accent);
+      color: var(--text);
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      z-index: 1000;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+    }
+
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--text3);
+      font-size: 0.8rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 860px) {
+      .product-page {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .product-details {
+        position: static;
+      }
+    }
+
+    @media (max-width: 640px) {
+      nav {
+        padding: 0 1rem;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .product-page,
+      .similar-section {
+        padding: 1.5rem 1rem 3rem;
+      }
+
+      .breadcrumb {
+        padding: 90px 1rem 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">Z</div>
+      ZBoy's <span>Shop</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="shoppingcart.html">Cart</a></li>
+    </ul>
+    <a href="shoppingcart.html" class="nav-cart">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1" />
+        <circle cx="20" cy="21" r="1" />
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.58h9.72a2 2 0 0 0 2-1.57l1.38-7.39H5.12" />
+      </svg>
+      Cart
+      <span class="cart-badge" id="nav-badge">0</span>
+    </a>
+  </nav>
+
+  <div class="breadcrumb">
+    <a href="index.html">Home</a>
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="9 18 15 12 9 6" />
+    </svg>
+    <a href="products.html">Products</a>
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="9 18 15 12 9 6" />
+    </svg>
+    <span id="breadcrumb-name">Loading...</span>
+  </div>
+
+  <div class="product-page" id="product-page">
+    <div style="color:var(--text3);padding:4rem 0;grid-column:1/-1;text-align:center">Loading product...</div>
+  </div>
+
+  <div class="similar-section">
+    <h2>You Might Also Like</h2>
+    <div class="similar-grid" id="similar-grid"></div>
+  </div>
+
+  <footer>
+    <p>© 2026 ZBoy Inc. All rights reserved.</p>
+  </footer>
+
+  <div id="toast">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"
+      stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+    <span id="toast-msg">Added to cart!</span>
+  </div>
+
+  <script>
+    const PRODUCTS = [
+      {
+        id: 1, name: "Product Alpha", price: 9.99, category: "popular", tag: "Best Seller", image: "images/products/product-1.svg",
+        desc: "Top-rated product with instant delivery and premium support included.",
+        longDesc: "Product Alpha is our most popular offering, consistently rated 5 stars by our customers. Designed for users who need reliable, fast delivery and premium support. Every purchase comes with a lifetime license key, meaning you never have to pay again. Our automated delivery system ensures your key reaches you within seconds of purchase.",
+        features: ["Instant digital delivery", "Lifetime license included", "24/7 customer support", "Compatible with all platforms", "Full refund within 7 days"],
+        specs: { "Type": "Digital Key", "Delivery": "Instant", "License": "Lifetime", "Platform": "Universal", "Version": "2024" }
+      },
+      {
+        id: 2, name: "Product Beta", price: 14.99, category: "popular", tag: "Hot", image: "images/products/product-2.svg",
+        desc: "High demand item. Trusted by thousands of customers worldwide.",
+        longDesc: "Product Beta has been one of our bestsellers for over a year. Trusted by more than 5,000 verified buyers globally, it consistently delivers on its promise. The upgrade tier includes access to premium features not found in entry-level options. Ideal for users who need more power and flexibility.",
+        features: ["Premium tier access", "Multi-device support", "Priority support queue", "Automatic updates", "Secure activation"],
+        specs: { "Type": "Digital Key", "Delivery": "Instant", "License": "1 Year", "Platform": "Windows / Mac", "Version": "Latest" }
+      },
+      {
+        id: 3, name: "Product Gamma", price: 7.49, category: "popular", tag: "Popular", image: "images/products/product-3.svg",
+        desc: "Community favorite. Great value for the features provided.",
+        longDesc: "Product Gamma is a community favorite that strikes the perfect balance between price and capability. It's perfect for users who want solid functionality without overspending. Our community has spoken — this is the go-to choice for everyday use with its lightweight footprint and reliable performance.",
+        features: ["Community-endorsed", "Lightweight footprint", "Easy activation", "Regular updates", "Beginner friendly"],
+        specs: { "Type": "Digital Key", "Delivery": "Instant", "License": "6 Months", "Platform": "Universal", "Version": "3.x" }
+      },
+      {
+        id: 4, name: "Product Delta", price: 19.99, category: "popular", tag: "Premium", image: "images/products/product-4.svg",
+        desc: "Enhanced edition with all features unlocked and lifetime updates.",
+        longDesc: "Product Delta is our enhanced premium edition. Every single feature is unlocked from day one, with no paywalls or hidden upgrades. You also receive lifetime updates, ensuring your product always stays current. This is the definitive package for users who don't want to compromise.",
+        features: ["All features unlocked", "Lifetime updates", "Dedicated support channel", "Advanced configuration", "Priority delivery"],
+        specs: { "Type": "Digital Key", "Delivery": "Instant", "License": "Lifetime", "Platform": "Universal", "Version": "All" }
+      },
+      {
+        id: 5, name: "Product Epsilon", price: 24.99, category: "popular", tag: "Elite", image: "images/products/product-5.svg",
+        desc: "Top-tier product for power users who need maximum performance.",
+        longDesc: "Product Epsilon sits at the top of our lineup. Built for power users and professionals, it delivers maximum performance and the most comprehensive feature set we offer. With elite-tier support and guaranteed SLA response times, you're in the best possible hands.",
+        features: ["Elite-tier support", "SLA guaranteed response", "Unlimited activations", "Commercial use license", "White-glove onboarding"],
+        specs: { "Type": "Digital Key", "Delivery": "Instant", "License": "Lifetime Commercial", "Platform": "Universal", "Version": "All" }
+      },
+      {
+        id: 11, name: "New Release X", price: 12.99, category: "new", tag: "New", image: "images/products/product-11.svg",
+        desc: "Brand new arrival. Be among the first to get it at launch price.",
+        longDesc: "New Release X is our latest drop, freshly added to the catalog. Early adopters get a special launch price before it goes up. This product introduces several innovations not seen in previous versions, making it worth picking up now while the price is at its lowest.",
+        features: ["Launch pricing", "Early access perks", "New technology", "Fresh codebase", "Active development"],
+        specs: { "Type": "Digital Key", "Delivery": "Instant", "License": "1 Year", "Platform": "Windows", "Version": "1.0" }
+      },
+      {
+        id: 12, name: "New Release Y", price: 16.99, category: "new", tag: "New", image: "images/products/product-12.svg",
+        desc: "Latest addition to our catalog. Limited launch pricing available.",
+        longDesc: "New Release Y is a security-focused product designed for users who put protection first. Built with the latest protocols, it offers robust safeguards without sacrificing speed. Launch pricing won't last — grab it now before the price adjusts to its regular rate.",
+        features: ["Security-first design", "Latest protocols", "Launch pricing", "Fast activation", "Regular patches"],
+        specs: { "Type": "Digital Key", "Delivery": "Instant", "License": "1 Year", "Platform": "Universal", "Version": "1.0" }
+      },
+      {
+        id: 13, name: "New Release Z", price: 8.99, category: "new", tag: "New", image: "images/products/product-13.svg",
+        desc: "Fresh drop at an accessible price point. Don't miss launch week.",
+        longDesc: "New Release Z rounds out our new arrivals at an accessible price point. It's a great entry point to test what our newer generation of products can do without a big commitment. Launch week pricing is active — pick it up now for maximum value.",
+        features: ["Accessible pricing", "Launch week deal", "New generation", "Easy setup", "No subscription"],
+        specs: { "Type": "Digital Key", "Delivery": "Instant", "License": "6 Months", "Platform": "Windows / Mac", "Version": "1.0" }
+      },
+      {
+        id: 21, name: "Budget Pick A", price: 2.99, category: "budget", tag: "Value", image: "images/products/product-21.svg",
+        desc: "Great quality at an unbeatable price. Perfect for getting started.",
+        longDesc: "Budget Pick A proves that you don't need to spend a lot to get something good. At just €2.99, it's the lowest barrier to entry in our store. Perfect for first-time buyers who want to try our service risk-free, or for users who just need basic functionality.",
+        features: ["Lowest price in store", "Zero risk entry point", "Full delivery guarantee", "Basic features included", "Upgrade available"],
+        specs: { "Type": "Digital Key", "Delivery": "Instant", "License": "30 Days", "Platform": "Universal", "Version": "Standard" }
+      },
+      {
+        id: 22, name: "Budget Pick B", price: 4.99, category: "budget", tag: "Value", image: "images/products/product-22.svg",
+        desc: "Affordable option without compromising on quality or delivery speed.",
+        longDesc: "Budget Pick B is the sweet spot in our value tier. A step up from our entry-level offering, it provides more features while remaining very affordable. Delivery is just as fast as our premium products, and the license gives you solid coverage for the price.",
+        features: ["Better than entry-level", "Fast delivery", "Good feature set", "Budget-friendly", "Easy activation"],
+        specs: { "Type": "Digital Key", "Delivery": "Instant", "License": "60 Days", "Platform": "Universal", "Version": "Standard" }
+      },
+      {
+        id: 23, name: "Budget Pick C", price: 1.99, category: "budget", tag: "Cheapest", image: "images/products/product-23.svg",
+        desc: "Entry-level option perfect for trying out our service risk-free.",
+        longDesc: "Budget Pick C is our absolute most affordable product. At just €1.99, there's almost no reason not to try it. Ideal for users who are cautious about spending online and just want to verify that our delivery system works as described before making a larger purchase.",
+        features: ["Most affordable", "Try risk-free", "Delivery verified", "Quick activation", "No hidden fees"],
+        specs: { "Type": "Digital Key", "Delivery": "Instant", "License": "7 Days", "Platform": "Universal", "Version": "Lite" }
+      },
+    ];
+
+    function getCart() { return JSON.parse(localStorage.getItem('zboyCart') || '[]'); }
+    function saveCart(c) { localStorage.setItem('zboyCart', JSON.stringify(c)); }
+
+    function addToCart(id, qty) {
+      const product = PRODUCTS.find(p => p.id === id);
+      if (!product) return;
+      const cart = getCart();
+      const existing = cart.find(i => i.id === id);
+      if (existing) existing.qty += qty;
+      else cart.push({ id: product.id, name: product.name, price: product.price, qty });
+      saveCart(cart);
+      updateBadge();
+      showToast(`${qty}x ${product.name} added to cart!`);
+    }
+
+    function updateBadge() {
+      const cart = getCart();
+      const count = cart.reduce((a, i) => a + i.qty, 0);
+      const badge = document.getElementById('nav-badge');
+      if (!badge) return;
+      badge.textContent = count;
+      badge.classList.toggle('visible', count > 0);
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.info-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.info-panel').forEach(p => p.classList.remove('active'));
+      document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+      document.getElementById(`panel-${tabId}`).classList.add('active');
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const productId = parseInt(params.get('id') || '1');
+    const product = PRODUCTS.find(p => p.id === productId) || PRODUCTS[0];
+
+    document.title = `${product.name} — ZBoy's Shop`;
+    document.getElementById('breadcrumb-name').textContent = product.name;
+
+    const specsRows = Object.entries(product.specs).map(([k, v]) =>
+      `<tr><td>${k}</td><td>${v}</td></tr>`
+    ).join('');
+
+    document.getElementById('product-page').innerHTML = `
+    <div class="product-visual">
+      <div class="main-image"><img src="${product.image}" alt="${product.name}"/></div>
+      <div class="accent-line"></div>
+
+      <div class="product-info">
+        <div class="info-tabs">
+          <button class="info-tab active" data-tab="description" onclick="switchTab('description')">Description</button>
+          <button class="info-tab" data-tab="specs" onclick="switchTab('specs')">Specifications</button>
+        </div>
+
+        <div class="info-panel active" id="panel-description">
+          <h3>About ${product.name}</h3>
+          <p>${product.longDesc}</p>
+        </div>
+
+        <div class="info-panel" id="panel-specs">
+          <h3>Product Specifications</h3>
+          <table class="spec-table">
+            <tbody>${specsRows}</tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-details">
+      <div class="product-meta">
+        <span class="tag tag-category">${product.category}</span>
+        <span class="tag tag-status-ok">${product.tag}</span>
+      </div>
+
+      <h1 class="product-title">${product.name}</h1>
+      <p class="product-short-desc">${product.desc}</p>
+
+      <div class="price-block">
+        <div class="price-main">€${product.price.toFixed(2)}</div>
+        <div class="price-note">Instant delivery · Secure checkout</div>
+      </div>
+
+      <div class="qty-row">
+        <span class="qty-label">Quantity</span>
+        <div class="qty-control">
+          <button class="qty-btn" onclick="changeQty(-1)">−</button>
+          <input type="number" class="qty-input" id="qty" value="1" min="1" max="99"/>
+          <button class="qty-btn" onclick="changeQty(1)">+</button>
+        </div>
+      </div>
+
+      <button class="btn-add-cart" onclick="handleAddCart()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.58h9.72a2 2 0 0 0 2-1.57l1.38-7.39H5.12"/></svg>
+        Add to Cart
+      </button>
+
+      <a href="shoppingcart.html" class="btn-view-cart">
+        View Cart
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+
+      <div class="features-divider"></div>
+
+      <ul class="features-list">
+        ${product.features.map(f => `
+          <li>
+            <span class="feature-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            ${f}
+          </li>
+        `).join('')}
+      </ul>
+    </div>
+  `;
+
+    // Similar products
+    const similar = PRODUCTS.filter(p => p.id !== productId && p.category === product.category).slice(0, 4);
+    document.getElementById('similar-grid').innerHTML = similar.map(p => `
+    <a href="product.html?id=${p.id}" class="sim-card">
+      <div class="sim-image-wrap"><img src="${p.image}" alt="${p.name}" class="sim-image"/></div>
+      <div class="sim-body">
+        <div class="sim-name">${p.name}</div>
+        <div class="sim-price">€${p.price.toFixed(2)}</div>
+      </div>
+    </a>
+  `).join('');
+
+    function changeQty(delta) {
+      const input = document.getElementById('qty');
+      const newVal = Math.max(1, Math.min(99, parseInt(input.value || 1) + delta));
+      input.value = newVal;
+    }
+
+    function handleAddCart() {
+      const qty = parseInt(document.getElementById('qty').value || 1);
+      addToCart(productId, qty);
+    }
+
+    updateBadge();
+  </script>
+</body>
+
+</html>
