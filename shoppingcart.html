@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -161,7 +161,6 @@
       display: inline;
     }
 
-    /* PAGE */
     .page-wrap {
       max-width: 1100px;
       margin: 0 auto;
@@ -187,15 +186,19 @@
       font-size: 0.9375rem;
     }
 
-    /* LAYOUT */
+    #cart-items-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
     .cart-layout {
       display: grid;
       grid-template-columns: 1fr 360px;
-      gap: 2rem;
+      gap: 0.75rem;
       align-items: start;
     }
 
-    /* CART ITEMS */
     .cart-items {
       display: flex;
       flex-direction: column;
@@ -333,7 +336,6 @@
       background: rgba(255, 71, 87, 0.08);
     }
 
-    /* EMPTY */
     .empty-cart {
       text-align: center;
       padding: 5rem 2rem;
@@ -359,7 +361,6 @@
       margin-bottom: 2rem;
     }
 
-    /* SUMMARY */
     .cart-summary {
       background: var(--bg2);
       border: 1px solid var(--border);
@@ -418,15 +419,20 @@
       color: var(--accent);
     }
 
-    /* PROMO */
     .promo-row {
       display: flex;
       gap: 0.5rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
+      width: 100%;
+      opacity: 1;
+      overflow: visible;
+      position: static;
+      pointer-events: auto;
     }
 
     .promo-input {
       flex: 1;
+      min-width: 0;
       background: var(--surface);
       border: 1px solid var(--border);
       color: var(--text);
@@ -435,8 +441,13 @@
       padding: 0.5rem 0.875rem;
       border-radius: 8px;
       outline: none;
-      transition: border-color 0.15s;
+      transition: border-color 0.15s, opacity 0.15s;
       letter-spacing: 0.05em;
+      width: auto;
+      height: auto;
+      opacity: 1;
+      position: static;
+      pointer-events: auto;
     }
 
     .promo-input::placeholder {
@@ -445,6 +456,11 @@
 
     .promo-input:focus {
       border-color: var(--border-accent);
+    }
+
+    .promo-input:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
     }
 
     .promo-btn {
@@ -459,11 +475,22 @@
       cursor: pointer;
       transition: all 0.15s;
       white-space: nowrap;
+      opacity: 1;
+      position: static;
+      pointer-events: auto;
     }
 
     .promo-btn:hover {
       color: var(--text);
       border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .promo-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      color: var(--green);
+      border-color: rgba(0, 229, 153, 0.28);
+      background: rgba(0, 229, 153, 0.08);
     }
 
     .promo-success {
@@ -550,7 +577,6 @@
       color: var(--text3);
     }
 
-    /* CHECKOUT MODAL */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -643,6 +669,40 @@
       cursor: pointer;
     }
 
+    .modal-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .modal-actions .modal-close {
+      margin: 0;
+    }
+
+    .modal-cancel {
+      width: 100%;
+      background: transparent;
+      color: var(--text2);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.875rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .modal-cancel:hover {
+      color: var(--text);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .modal-danger {
+      background: rgba(255, 71, 87, 0.12);
+      border-color: rgba(255, 71, 87, 0.45);
+      color: #ff8c96;
+    }
+
     footer {
       border-top: 1px solid var(--border);
       padding: 2rem;
@@ -684,12 +744,19 @@
         width: 100%;
         justify-content: space-between;
       }
+
+      .promo-row {
+        flex-direction: column;
+      }
+
+      .promo-btn {
+        width: 100%;
+      }
     }
   </style>
 </head>
 
 <body>
-
   <nav>
     <a href="index.html" class="nav-logo">
       <div class="nav-logo-icon">Z</div>
@@ -729,7 +796,7 @@
         </div>
         <div class="summary-row">
           <span class="summary-row-label">Discount</span>
-          <span class="summary-row-value" id="summary-discount" style="color:var(--green)">—</span>
+          <span class="summary-row-value" id="summary-discount" style="color:var(--green)">-</span>
         </div>
 
         <div class="summary-divider"></div>
@@ -741,7 +808,7 @@
 
         <div class="promo-row">
           <input type="text" class="promo-input" id="promo-code" placeholder="PROMO CODE" maxlength="20" />
-          <button class="promo-btn" onclick="applyPromo()">Apply</button>
+          <button class="promo-btn" id="promo-btn" onclick="applyPromo()">Apply</button>
         </div>
 
         <div class="promo-success" id="promo-success">
@@ -761,7 +828,7 @@
           Proceed to Checkout
         </button>
 
-        <button class="btn-clear" onclick="clearCart()">Clear Cart</button>
+        <button class="btn-clear" onclick="openClearConfirm()">Clear Cart</button>
 
         <div class="trust-row">
           <div class="trust-item">
@@ -795,15 +862,31 @@
     <p>© 2026 ZBoy Inc. All rights reserved.</p>
   </footer>
 
-  <!-- Checkout Modal -->
   <div class="modal-backdrop" id="modal-backdrop">
     <div class="modal">
       <img src="images/icons/order-confirmed.svg" alt="Order confirmed" class="modal-icon" />
       <h2>Order Confirmed!</h2>
-      <p>Your order has been placed successfully. Your digital keys will be delivered instantly to your email address.
-      </p>
+      <p>Your order has been placed successfully. Your digital keys will be delivered instantly to your email address.</p>
       <div class="modal-order" id="modal-order-summary"></div>
       <button class="modal-close" onclick="closeCheckout()">Continue Shopping</button>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="clear-modal-backdrop">
+    <div class="modal">
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" class="modal-icon modal-danger" style="padding:12px;border-radius:12px;">
+        <path d="M3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <h2>Clear Cart?</h2>
+      <p>This will remove all items from your cart and reset any applied discount.</p>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeClearConfirm()">Cancel</button>
+        <button class="modal-close" onclick="confirmClearCart()">Yes, Clear</button>
+      </div>
     </div>
   </div>
 
@@ -836,28 +919,75 @@
     function removeItem(id) {
       const cart = getCart().filter(i => i.id !== id);
       saveCart(cart);
+      if (!cart.length) discountApplied = false;
       render();
     }
 
-    function clearCart() {
-      if (!confirm('Remove all items from your cart?')) return;
+    function resetPromoUI() {
+      const input = document.getElementById('promo-code');
+      const button = document.getElementById('promo-btn');
+      const success = document.getElementById('promo-success');
+      if (!input || !button || !success) return;
+      input.value = '';
+      input.disabled = false;
+      input.style.borderColor = '';
+      button.disabled = false;
+      button.textContent = 'Apply';
+      success.classList.remove('visible');
+    }
+
+    function syncPromoUI() {
+      const input = document.getElementById('promo-code');
+      const button = document.getElementById('promo-btn');
+      const success = document.getElementById('promo-success');
+      if (!input || !button || !success) return;
+      if (discountApplied) {
+        input.disabled = true;
+        button.disabled = true;
+        button.textContent = '✓';
+        success.classList.add('visible');
+      } else {
+        input.disabled = false;
+        button.disabled = false;
+        button.textContent = 'Apply';
+        success.classList.remove('visible');
+      }
+    }
+
+    function confirmClearCart() {
       saveCart([]);
       discountApplied = false;
+      resetPromoUI();
+      closeClearConfirm();
       render();
+    }
+
+    function openClearConfirm() {
+      if (!getCart().length) return;
+      document.getElementById('clear-modal-backdrop').classList.add('open');
+    }
+
+    function closeClearConfirm() {
+      document.getElementById('clear-modal-backdrop').classList.remove('open');
     }
 
     function applyPromo() {
-      const code = document.getElementById('promo-code').value.toUpperCase().trim();
+      if (discountApplied) return;
+      const input = document.getElementById('promo-code');
+      const button = document.getElementById('promo-btn');
+      const code = input.value.toUpperCase().trim();
       if (VALID_CODES.includes(code)) {
         discountApplied = true;
+        input.disabled = true;
+        button.disabled = true;
+        button.textContent = '✓';
         document.getElementById('promo-success').classList.add('visible');
-        document.getElementById('promo-code').disabled = true;
-        document.querySelector('.promo-btn').disabled = true;
-        document.querySelector('.promo-btn').textContent = '✓';
         updateSummary();
       } else {
-        document.getElementById('promo-code').style.borderColor = 'var(--red)';
-        setTimeout(() => { document.getElementById('promo-code').style.borderColor = ''; }, 1200);
+        input.style.borderColor = 'var(--red)';
+        setTimeout(() => {
+          if (input) input.style.borderColor = '';
+        }, 1200);
       }
     }
 
@@ -875,19 +1005,32 @@
       const total = getTotal();
       const discount = sub - total;
       document.getElementById('summary-subtotal').textContent = `€${sub.toFixed(2)}`;
-      document.getElementById('summary-discount').textContent = discount > 0 ? `−€${discount.toFixed(2)}` : '—';
+      document.getElementById('summary-discount').textContent = discount > 0 ? `-€${discount.toFixed(2)}` : '-';
       document.getElementById('summary-total').textContent = `€${total.toFixed(2)}`;
     }
 
     function openCheckout() {
       const cart = getCart();
       if (!cart.length) return;
+
+      const subtotal = getSubtotal();
       const total = getTotal();
+      const discount = subtotal - total;
+
       const rows = cart.map(i =>
         `<div class="modal-order-row"><span>${i.name} ×${i.qty}</span><span>€${(i.price * i.qty).toFixed(2)}</span></div>`
       ).join('');
-      document.getElementById('modal-order-summary').innerHTML = rows +
+
+      const discountRow = discount > 0
+        ? `<div class="modal-order-row"><span>Discount</span><span style="color:var(--green)">-€${discount.toFixed(2)}</span></div>`
+        : '';
+
+      document.getElementById('modal-order-summary').innerHTML =
+        rows +
+        `<div class="modal-order-row"><span>Subtotal</span><span>€${subtotal.toFixed(2)}</span></div>` +
+        discountRow +
         `<div class="modal-order-row"><span>Total Paid</span><span>€${total.toFixed(2)}</span></div>`;
+
       document.getElementById('modal-backdrop').classList.add('open');
     }
 
@@ -895,11 +1038,20 @@
       document.getElementById('modal-backdrop').classList.remove('open');
       saveCart([]);
       discountApplied = false;
+      resetPromoUI();
       render();
     }
 
     document.getElementById('modal-backdrop').addEventListener('click', e => {
       if (e.target === e.currentTarget) closeCheckout();
+    });
+
+    document.getElementById('clear-modal-backdrop').addEventListener('click', e => {
+      if (e.target === e.currentTarget) closeClearConfirm();
+    });
+
+    document.getElementById('promo-code').addEventListener('keydown', e => {
+      if (e.key === 'Enter') applyPromo();
     });
 
     function render() {
@@ -913,6 +1065,7 @@
       if (!cart.length) {
         subtitle.textContent = '0 items';
         summary.style.display = 'none';
+        resetPromoUI();
         container.innerHTML = `
         <div class="empty-cart">
           <img src="images/icons/empty-cart.svg" alt="Empty cart" class="empty-cart-icon"/>
@@ -931,6 +1084,7 @@
       subtitle.textContent = `${totalItems} item${totalItems !== 1 ? 's' : ''} in your cart`;
       summary.style.display = 'block';
       updateSummary();
+      syncPromoUI();
 
       container.innerHTML = cart.map(item => `
       <div class="cart-item">
@@ -941,7 +1095,7 @@
         </div>
         <div class="item-controls">
           <div class="qty-control">
-            <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+            <button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>
             <span class="qty-display">${item.qty}</span>
             <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
           </div>
