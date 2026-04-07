@@ -733,14 +733,14 @@
   <script>
     // ── PRODUCT DATA ─────────────────────────────────────────────
     const PRODUCTS = [
-      { id: 1, name: "Product Alpha", price: 9.99, category: "popular", tag: "Best Seller", desc: "Top-rated product with instant delivery and premium support included." },
-      { id: 2, name: "Product Beta", price: 14.99, category: "popular", tag: "Hot", desc: "High demand item. Trusted by thousands of customers worldwide." },
-      { id: 3, name: "Product Gamma", price: 7.49, category: "popular", tag: "Popular", desc: "Community favorite. Great value for the features provided." },
-      { id: 4, name: "Product Delta", price: 19.99, category: "popular", tag: "Premium", desc: "Enhanced edition with all features unlocked and lifetime updates." },
-      { id: 11, name: "New Release X", price: 12.99, category: "new", tag: "New", desc: "Brand new arrival. Be among the first to get it at launch price." },
-      { id: 12, name: "New Release Y", price: 16.99, category: "new", tag: "New", desc: "Latest addition to our catalog. Limited launch pricing available." },
-      { id: 21, name: "Budget Pick A", price: 2.99, category: "budget", tag: "Value", desc: "Great quality at an unbeatable price. Perfect for getting started." },
-      { id: 22, name: "Budget Pick B", price: 4.99, category: "budget", tag: "Value", desc: "Affordable option without compromising on quality or delivery speed." },
+      { id: 1, name: "Product Alpha", price: 9.99, category: "popular", tag: "Best Seller", desc: "Top-rated product with instant delivery and premium support included.", image: "images/products/product-1.svg" },
+      { id: 2, name: "Product Beta", price: 14.99, category: "popular", tag: "Hot", desc: "High demand item. Trusted by thousands of customers worldwide.", image: "images/products/product-2.svg" },
+      { id: 3, name: "Product Gamma", price: 7.49, category: "popular", tag: "Popular", desc: "Community favorite. Great value for the features provided.", image: "images/products/product-3.svg" },
+      { id: 4, name: "Product Delta", price: 19.99, category: "popular", tag: "Premium", desc: "Enhanced edition with all features unlocked and lifetime updates.", image: "images/products/product-4.svg" },
+      { id: 11, name: "New Release X", price: 12.99, category: "new", tag: "New", desc: "Brand new arrival. Be among the first to get it at launch price.", image: "images/products/product-11.svg" },
+      { id: 12, name: "New Release Y", price: 16.99, category: "new", tag: "New", desc: "Latest addition to our catalog. Limited launch pricing available.", image: "images/products/product-12.svg" },
+      { id: 21, name: "Budget Pick A", price: 2.99, category: "budget", tag: "Value", desc: "Great quality at an unbeatable price. Perfect for getting started.", image: "images/products/product-21.svg" },
+      { id: 22, name: "Budget Pick B", price: 4.99, category: "budget", tag: "Value", desc: "Affordable option without compromising on quality or delivery speed.", image: "images/products/product-22.svg" },
     ];
 
     // ── CART ──────────────────────────────────────────────────────
@@ -780,7 +780,7 @@
       return `
       <div class="product-card">
         <a href="product.html?id=${p.id}" style="text-decoration:none;color:inherit;">
-          <div class="product-img-placeholder"></div>
+          <div class="product-img-placeholder"><img src="${p.image}" alt="${p.name}" class="product-img"/></div>
         </a>
         <div class="product-body">
           <div class="product-badge">
