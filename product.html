@@ -890,7 +890,7 @@
     const productId = parseInt(params.get('id') || '1');
     const product = PRODUCTS.find(p => p.id === productId) || PRODUCTS[0];
 
-    document.title = `${product.name} — ZBoy's Shop`;
+    document.title = `${product.name} - ZBoy's Shop`;
     document.getElementById('breadcrumb-name').textContent = product.name;
 
     const specsRows = Object.entries(product.specs).map(([k, v]) =>
