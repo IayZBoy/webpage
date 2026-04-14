@@ -56,7 +56,6 @@
       overflow-x: hidden;
     }
 
-    /* NOISE OVERLAY */
     body::before {
       content: '';
       position: fixed;
@@ -137,6 +136,7 @@
       background: var(--surface);
     }
 
+    /* nav-cart: small → scale */
     .nav-cart {
       position: relative;
       display: flex;
@@ -150,13 +150,18 @@
       text-decoration: none;
       font-size: 0.875rem;
       font-weight: 500;
-      transition: border-color 0.2s, background 0.2s;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
       justify-self: end;
     }
 
     .nav-cart:hover {
       border-color: var(--border-accent);
       background: var(--accent-glow);
+      transform: scale(1.06);
+    }
+
+    .nav-cart:active {
+      transform: scale(0.94);
     }
 
     .cart-badge {
@@ -257,6 +262,7 @@
       gap: 0.75rem;
     }
 
+    /* large button → press down */
     .btn-primary {
       display: inline-flex;
       align-items: center;
@@ -271,18 +277,22 @@
       text-decoration: none;
       border: none;
       cursor: pointer;
-      transition: opacity 0.2s, transform 0.15s;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.15s;
     }
 
     .btn-primary:hover {
-      opacity: 0.88;
-      transform: translateY(-1px);
+      opacity: 0.92;
+      transform: translateY(2px);
+      box-shadow: 0 2px 8px rgba(0, 212, 255, 0.25);
     }
 
     .btn-primary:active {
-      transform: translateY(0);
+      transform: translateY(4px);
+      box-shadow: none;
+      opacity: 1;
     }
 
+    /* large button → press down */
     .btn-secondary {
       display: inline-flex;
       align-items: center;
@@ -297,13 +307,18 @@
       text-decoration: none;
       border: 1px solid var(--border);
       cursor: pointer;
-      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      transition: color 0.2s, border-color 0.2s, background 0.2s, transform 0.15s;
     }
 
     .btn-secondary:hover {
       color: var(--text);
       border-color: rgba(255, 255, 255, 0.15);
       background: var(--surface);
+      transform: translateY(2px);
+    }
+
+    .btn-secondary:active {
+      transform: translateY(4px);
     }
 
     /* STATS */
@@ -482,6 +497,7 @@
       color: var(--text);
     }
 
+    /* small button → scale */
     .btn-add {
       background: var(--accent-glow);
       border: 1px solid var(--border-accent);
@@ -492,11 +508,16 @@
       border-radius: 8px;
       cursor: pointer;
       font-family: 'DM Sans', sans-serif;
-      transition: background 0.2s, border-color 0.2s;
+      transition: background 0.2s, transform 0.15s;
     }
 
     .btn-add:hover {
       background: rgba(0, 212, 255, 0.2);
+      transform: scale(1.08);
+    }
+
+    .btn-add:active {
+      transform: scale(0.93);
     }
 
     /* BANNER */
@@ -731,7 +752,6 @@
   </div>
 
   <script>
-    // ── PRODUCT DATA ─────────────────────────────────────────────
     const PRODUCTS = [
       { id: 1, name: "Product Alpha", price: 9.99, category: "popular", tag: "Best Seller", desc: "Top-rated product with instant delivery and premium support included.", image: "images/products/product-1.svg" },
       { id: 2, name: "Product Beta", price: 14.99, category: "popular", tag: "Hot", desc: "High demand item. Trusted by thousands of customers worldwide.", image: "images/products/product-2.svg" },
@@ -743,7 +763,6 @@
       { id: 22, name: "Budget Pick B", price: 4.99, category: "budget", tag: "Value", desc: "Affordable option without compromising on quality or delivery speed.", image: "images/products/product-22.svg" },
     ];
 
-    // ── CART ──────────────────────────────────────────────────────
     function getCart() { return JSON.parse(localStorage.getItem('zboyCart') || '[]'); }
     function saveCart(c) { localStorage.setItem('zboyCart', JSON.stringify(c)); }
 
@@ -775,8 +794,7 @@
       setTimeout(() => t.classList.remove('show'), 2500);
     }
 
-    // ── RENDER CARDS ──────────────────────────────────────────────
-    function renderCard(p, idx) {
+    function renderCard(p) {
       return `
       <div class="product-card">
         <a href="product.html?id=${p.id}" style="text-decoration:none;color:inherit;">
@@ -803,7 +821,7 @@
     function renderGrid(containerId, category) {
       const container = document.getElementById(containerId);
       const items = PRODUCTS.filter(p => p.category === category);
-      container.innerHTML = items.map((p, i) => renderCard(p, i)).join('');
+      container.innerHTML = items.map(p => renderCard(p)).join('');
     }
 
     renderGrid('popular-grid', 'popular');

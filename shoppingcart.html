@@ -285,6 +285,7 @@
       overflow: hidden;
     }
 
+    /* small → scale */
     .qty-btn {
       background: var(--surface);
       border: none;
@@ -293,12 +294,17 @@
       height: 32px;
       font-size: 1rem;
       cursor: pointer;
-      transition: background 0.15s;
       font-family: 'DM Mono', monospace;
+      transition: background 0.15s, transform 0.12s;
     }
 
     .qty-btn:hover {
       background: rgba(255, 255, 255, 0.08);
+      transform: scale(1.18);
+    }
+
+    .qty-btn:active {
+      transform: scale(0.85);
     }
 
     .qty-display {
@@ -318,6 +324,7 @@
       min-width: 70px;
     }
 
+    /* small → scale */
     .item-remove {
       background: none;
       border: none;
@@ -328,12 +335,17 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: color 0.15s, background 0.15s;
+      transition: color 0.15s, background 0.15s, transform 0.12s;
     }
 
     .item-remove:hover {
       color: var(--red);
       background: rgba(255, 71, 87, 0.08);
+      transform: scale(1.18);
+    }
+
+    .item-remove:active {
+      transform: scale(0.85);
     }
 
     .empty-cart {
@@ -441,7 +453,7 @@
       padding: 0.5rem 0.875rem;
       border-radius: 8px;
       outline: none;
-      transition: border-color 0.15s, opacity 0.15s;
+      transition: border-color 0.15s;
       letter-spacing: 0.05em;
       width: auto;
       height: auto;
@@ -463,6 +475,7 @@
       cursor: not-allowed;
     }
 
+    /* small → scale */
     .promo-btn {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -473,21 +486,27 @@
       padding: 0.5rem 0.875rem;
       border-radius: 8px;
       cursor: pointer;
-      transition: all 0.15s;
       white-space: nowrap;
       opacity: 1;
       position: static;
       pointer-events: auto;
+      transition: color 0.15s, border-color 0.15s, transform 0.12s;
     }
 
     .promo-btn:hover {
       color: var(--text);
       border-color: rgba(255, 255, 255, 0.15);
+      transform: scale(1.07);
+    }
+
+    .promo-btn:active {
+      transform: scale(0.93);
     }
 
     .promo-btn:disabled {
       opacity: 0.65;
       cursor: not-allowed;
+      transform: none;
       color: var(--green);
       border-color: rgba(0, 229, 153, 0.28);
       background: rgba(0, 229, 153, 0.08);
@@ -506,6 +525,7 @@
       display: flex;
     }
 
+    /* large → press down */
     .btn-checkout {
       width: 100%;
       background: var(--accent);
@@ -517,7 +537,7 @@
       border-radius: 10px;
       border: none;
       cursor: pointer;
-      transition: opacity 0.2s, transform 0.15s;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.15s;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -526,12 +546,15 @@
     }
 
     .btn-checkout:hover {
-      opacity: 0.88;
-      transform: translateY(-1px);
+      opacity: 0.92;
+      transform: translateY(2px);
+      box-shadow: 0 2px 10px rgba(0, 212, 255, 0.3);
     }
 
     .btn-checkout:active {
-      transform: none;
+      transform: translateY(4px);
+      box-shadow: none;
+      opacity: 1;
     }
 
     .btn-checkout:disabled {
@@ -540,6 +563,7 @@
       transform: none;
     }
 
+    /* large → press down */
     .btn-clear {
       width: 100%;
       background: transparent;
@@ -551,12 +575,17 @@
       border-radius: 10px;
       border: 1px solid rgba(255, 71, 87, 0.2);
       cursor: pointer;
-      transition: all 0.15s;
+      transition: background 0.15s, border-color 0.15s, transform 0.15s;
     }
 
     .btn-clear:hover {
       background: rgba(255, 71, 87, 0.08);
       border-color: rgba(255, 71, 87, 0.4);
+      transform: translateY(2px);
+    }
+
+    .btn-clear:active {
+      transform: translateY(4px);
     }
 
     .trust-row {
@@ -656,6 +685,7 @@
       font-family: 'DM Mono', monospace;
     }
 
+    /* large → press down */
     .modal-close {
       width: 100%;
       background: var(--accent);
@@ -667,6 +697,17 @@
       border-radius: 10px;
       border: none;
       cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+
+    .modal-close:hover {
+      opacity: 0.9;
+      transform: translateY(2px);
+    }
+
+    .modal-close:active {
+      transform: translateY(4px);
+      opacity: 1;
     }
 
     .modal-actions {
@@ -678,6 +719,7 @@
       margin: 0;
     }
 
+    /* large → press down */
     .modal-cancel {
       width: 100%;
       background: transparent;
@@ -689,12 +731,17 @@
       border-radius: 10px;
       border: 1px solid var(--border);
       cursor: pointer;
-      transition: color 0.2s, border-color 0.2s;
+      transition: color 0.2s, border-color 0.2s, transform 0.15s;
     }
 
     .modal-cancel:hover {
       color: var(--text);
       border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(2px);
+    }
+
+    .modal-cancel:active {
+      transform: translateY(4px);
     }
 
     .modal-danger {
@@ -789,7 +836,6 @@
       <div id="cart-items-container"></div>
       <div class="cart-summary" id="cart-summary" style="display:none">
         <div class="summary-title">Order Summary</div>
-
         <div class="summary-row">
           <span class="summary-row-label">Subtotal</span>
           <span class="summary-row-value" id="summary-subtotal">€0.00</span>
@@ -798,9 +844,7 @@
           <span class="summary-row-label">Discount</span>
           <span class="summary-row-value" id="summary-discount" style="color:var(--green)">-</span>
         </div>
-
         <div class="summary-divider"></div>
-
         <div class="summary-total">
           <span class="summary-total-label">Total</span>
           <span class="summary-total-value" id="summary-total">€0.00</span>
@@ -866,7 +910,8 @@
     <div class="modal">
       <img src="images/icons/order-confirmed.svg" alt="Order confirmed" class="modal-icon" />
       <h2>Order Confirmed!</h2>
-      <p>Your order has been placed successfully. Your digital keys will be delivered instantly to your email address.</p>
+      <p>Your order has been placed successfully. Your digital keys will be delivered instantly to your email address.
+      </p>
       <div class="modal-order" id="modal-order-summary"></div>
       <button class="modal-close" onclick="closeCheckout()">Continue Shopping</button>
     </div>
@@ -874,12 +919,13 @@
 
   <div class="modal-backdrop" id="clear-modal-backdrop">
     <div class="modal">
-      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" class="modal-icon modal-danger" style="padding:12px;border-radius:12px;">
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" class="modal-icon modal-danger"
+        style="padding:12px;border-radius:12px;">
         <path d="M3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round" />
-        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" />
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" />
       </svg>
       <h2>Clear Cart?</h2>
       <p>This will remove all items from your cart and reset any applied discount.</p>
@@ -891,7 +937,15 @@
   </div>
 
   <script>
-    const PRODUCT_IMAGES = { 1: 'images/products/product-1.svg', 2: 'images/products/product-2.svg', 3: 'images/products/product-3.svg', 4: 'images/products/product-4.svg', 5: 'images/products/product-5.svg', 11: 'images/products/product-11.svg', 12: 'images/products/product-12.svg', 13: 'images/products/product-13.svg', 21: 'images/products/product-21.svg', 22: 'images/products/product-22.svg', 23: 'images/products/product-23.svg' };
+    const PRODUCT_IMAGES = {
+      1: 'images/products/product-1.svg', 2: 'images/products/product-2.svg',
+      3: 'images/products/product-3.svg', 4: 'images/products/product-4.svg',
+      5: 'images/products/product-5.svg', 11: 'images/products/product-11.svg',
+      12: 'images/products/product-12.svg', 13: 'images/products/product-13.svg',
+      21: 'images/products/product-21.svg', 22: 'images/products/product-22.svg',
+      23: 'images/products/product-23.svg'
+    };
+
     let discountApplied = false;
     const VALID_CODES = ['NEWUSER20', 'SAVE20', 'ZBOY20'];
 
@@ -928,11 +982,8 @@
       const button = document.getElementById('promo-btn');
       const success = document.getElementById('promo-success');
       if (!input || !button || !success) return;
-      input.value = '';
-      input.disabled = false;
-      input.style.borderColor = '';
-      button.disabled = false;
-      button.textContent = 'Apply';
+      input.value = ''; input.disabled = false; input.style.borderColor = '';
+      button.disabled = false; button.textContent = 'Apply';
       success.classList.remove('visible');
     }
 
@@ -942,24 +993,17 @@
       const success = document.getElementById('promo-success');
       if (!input || !button || !success) return;
       if (discountApplied) {
-        input.disabled = true;
-        button.disabled = true;
-        button.textContent = '✓';
-        success.classList.add('visible');
+        input.disabled = true; button.disabled = true;
+        button.textContent = '✓'; success.classList.add('visible');
       } else {
-        input.disabled = false;
-        button.disabled = false;
-        button.textContent = 'Apply';
-        success.classList.remove('visible');
+        input.disabled = false; button.disabled = false;
+        button.textContent = 'Apply'; success.classList.remove('visible');
       }
     }
 
     function confirmClearCart() {
-      saveCart([]);
-      discountApplied = false;
-      resetPromoUI();
-      closeClearConfirm();
-      render();
+      saveCart([]); discountApplied = false;
+      resetPromoUI(); closeClearConfirm(); render();
     }
 
     function openClearConfirm() {
@@ -978,27 +1022,17 @@
       const code = input.value.toUpperCase().trim();
       if (VALID_CODES.includes(code)) {
         discountApplied = true;
-        input.disabled = true;
-        button.disabled = true;
-        button.textContent = '✓';
+        input.disabled = true; button.disabled = true; button.textContent = '✓';
         document.getElementById('promo-success').classList.add('visible');
         updateSummary();
       } else {
         input.style.borderColor = 'var(--red)';
-        setTimeout(() => {
-          if (input) input.style.borderColor = '';
-        }, 1200);
+        setTimeout(() => { if (input) input.style.borderColor = ''; }, 1200);
       }
     }
 
-    function getSubtotal() {
-      return getCart().reduce((a, i) => a + i.price * i.qty, 0);
-    }
-
-    function getTotal() {
-      const sub = getSubtotal();
-      return discountApplied ? sub * 0.8 : sub;
-    }
+    function getSubtotal() { return getCart().reduce((a, i) => a + i.price * i.qty, 0); }
+    function getTotal() { const sub = getSubtotal(); return discountApplied ? sub * 0.8 : sub; }
 
     function updateSummary() {
       const sub = getSubtotal();
@@ -1012,7 +1046,6 @@
     function openCheckout() {
       const cart = getCart();
       if (!cart.length) return;
-
       const subtotal = getSubtotal();
       const total = getTotal();
       const discount = subtotal - total;
@@ -1036,10 +1069,7 @@
 
     function closeCheckout() {
       document.getElementById('modal-backdrop').classList.remove('open');
-      saveCart([]);
-      discountApplied = false;
-      resetPromoUI();
-      render();
+      saveCart([]); discountApplied = false; resetPromoUI(); render();
     }
 
     document.getElementById('modal-backdrop').addEventListener('click', e => {
@@ -1059,25 +1089,29 @@
       const container = document.getElementById('cart-items-container');
       const summary = document.getElementById('cart-summary');
       const subtitle = document.getElementById('cart-subtitle');
+      const layout = document.getElementById('cart-layout');
 
       updateBadge();
 
       if (!cart.length) {
+        layout.style.gridTemplateColumns = '1fr';
         subtitle.textContent = '0 items';
         summary.style.display = 'none';
         resetPromoUI();
         container.innerHTML = `
-        <div class="empty-cart">
-          <img src="images/icons/empty-cart.svg" alt="Empty cart" class="empty-cart-icon"/>
-          <h2>Your cart is empty</h2>
-          <p>Looks like you haven't added anything yet.</p>
-          <a href="products.html" style="display:inline-flex;align-items:center;gap:0.5rem;background:var(--accent);color:var(--bg);font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.9375rem;padding:0.75rem 1.75rem;border-radius:10px;text-decoration:none;">
-            Browse Products
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      `;
+          <div class="empty-cart">
+            <img src="images/icons/empty-cart.svg" alt="Empty cart" class="empty-cart-icon"/>
+            <h2>Your cart is empty</h2>
+            <p>Looks like you haven't added anything yet.</p>
+            <a href="products.html" style="display:inline-flex;align-items:center;gap:0.5rem;background:var(--accent);color:var(--bg);font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.9375rem;padding:0.75rem 1.75rem;border-radius:10px;text-decoration:none;transition:transform 0.15s, box-shadow 0.15s" onmouseover="this.style.transform='translateY(2px)';this.style.boxShadow='0 2px 8px rgba(0,212,255,0.25)'" onmouseout="this.style.transform='';this.style.boxShadow=''" onmousedown="this.style.transform='translateY(4px)'" onmouseup="this.style.transform='translateY(2px)'">
+              Browse Products
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        `;
         return;
+      } else {
+        layout.style.gridTemplateColumns = '1fr 360px';
       }
 
       const totalItems = cart.reduce((a, i) => a + i.qty, 0);
@@ -1087,25 +1121,25 @@
       syncPromoUI();
 
       container.innerHTML = cart.map(item => `
-      <div class="cart-item">
-        <div class="item-image-wrap"><img src="${PRODUCT_IMAGES[item.id] || 'images/icons/package-default.svg'}" alt="${item.name}" class="item-image"/></div>
-        <div class="item-info">
-          <div class="item-name">${item.name}</div>
-          <div class="item-unit-price">€${item.price.toFixed(2)} each</div>
-        </div>
-        <div class="item-controls">
-          <div class="qty-control">
-            <button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>
-            <span class="qty-display">${item.qty}</span>
-            <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+        <div class="cart-item">
+          <div class="item-image-wrap"><img src="${PRODUCT_IMAGES[item.id] || 'images/icons/package-default.svg'}" alt="${item.name}" class="item-image"/></div>
+          <div class="item-info">
+            <div class="item-name">${item.name}</div>
+            <div class="item-unit-price">€${item.price.toFixed(2)} each</div>
           </div>
-          <div class="item-price">€${(item.price * item.qty).toFixed(2)}</div>
-          <button class="item-remove" onclick="removeItem(${item.id})" title="Remove">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-          </button>
+          <div class="item-controls">
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>
+              <span class="qty-display">${item.qty}</span>
+              <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+            </div>
+            <div class="item-price">€${(item.price * item.qty).toFixed(2)}</div>
+            <button class="item-remove" onclick="removeItem(${item.id})" title="Remove">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            </button>
+          </div>
         </div>
-      </div>
-    `).join('');
+      `).join('');
     }
 
     render();

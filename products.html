@@ -132,6 +132,7 @@
       background: var(--surface);
     }
 
+    /* small → scale */
     .nav-cart {
       position: relative;
       display: flex;
@@ -145,13 +146,18 @@
       text-decoration: none;
       font-size: 0.875rem;
       font-weight: 500;
-      transition: border-color 0.2s, background 0.2s;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
       justify-self: end;
     }
 
     .nav-cart:hover {
       border-color: var(--border-accent);
       background: var(--accent-glow);
+      transform: scale(1.06);
+    }
+
+    .nav-cart:active {
+      transform: scale(0.94);
     }
 
     .cart-badge {
@@ -169,7 +175,6 @@
       display: inline;
     }
 
-    /* PAGE */
     .page-header {
       padding: 120px 2rem 3rem;
       max-width: 1200px;
@@ -191,7 +196,6 @@
       font-size: 0.9375rem;
     }
 
-    /* FILTER BAR */
     .filter-bar {
       max-width: 1200px;
       margin: 0 auto;
@@ -204,6 +208,7 @@
       z-index: 1;
     }
 
+    /* small → scale */
     .filter-chip {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -214,12 +219,17 @@
       border-radius: 99px;
       cursor: pointer;
       font-family: 'DM Sans', sans-serif;
-      transition: all 0.15s;
+      transition: color 0.15s, border-color 0.15s, background 0.15s, transform 0.15s;
     }
 
     .filter-chip:hover {
       color: var(--text);
       border-color: rgba(255, 255, 255, 0.15);
+      transform: scale(1.07);
+    }
+
+    .filter-chip:active {
+      transform: scale(0.93);
     }
 
     .filter-chip.active {
@@ -263,7 +273,6 @@
       pointer-events: none;
     }
 
-    /* GRID */
     .products-section {
       max-width: 1200px;
       margin: 0 auto;
@@ -402,6 +411,7 @@
       gap: 0.375rem;
     }
 
+    /* small → scale */
     .btn-view {
       background: transparent;
       border: 1px solid var(--border);
@@ -415,14 +425,20 @@
       text-decoration: none;
       display: inline-flex;
       align-items: center;
-      transition: all 0.15s;
+      transition: color 0.15s, border-color 0.15s, transform 0.15s;
     }
 
     .btn-view:hover {
       color: var(--text);
       border-color: rgba(255, 255, 255, 0.15);
+      transform: scale(1.08);
     }
 
+    .btn-view:active {
+      transform: scale(0.92);
+    }
+
+    /* small → scale */
     .btn-add {
       background: var(--accent-glow);
       border: 1px solid var(--border-accent);
@@ -433,11 +449,16 @@
       border-radius: 8px;
       cursor: pointer;
       font-family: 'DM Sans', sans-serif;
-      transition: background 0.2s;
+      transition: background 0.2s, transform 0.15s;
     }
 
     .btn-add:hover {
       background: rgba(0, 212, 255, 0.22);
+      transform: scale(1.08);
+    }
+
+    .btn-add:active {
+      transform: scale(0.92);
     }
 
     .empty-state {
@@ -650,40 +671,39 @@
 
       if (!filtered.length) {
         grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
-        <img src="images/icons/empty-search.svg" alt="No products found" class="empty-state-icon"/>
-        <h3>No products found</h3>
-        <p>Try adjusting your search or filter.</p>
-      </div>`;
+          <img src="images/icons/empty-search.svg" alt="No products found" class="empty-state-icon"/>
+          <h3>No products found</h3>
+          <p>Try adjusting your search or filter.</p>
+        </div>`;
         return;
       }
 
       grid.innerHTML = filtered.map(p => `
-      <div class="product-card">
-        <a href="product.html?id=${p.id}" style="text-decoration:none">
-          <div class="product-img-placeholder"><img src="${p.image}" alt="${p.name}" class="product-img"/></div>
-        </a>
-        <div class="product-body">
-          <div class="product-tags">
-            <span class="tag tag-category">${p.category}</span>
-            <span class="tag ${p.tagType}">${p.tag}</span>
-          </div>
-          <a href="product.html?id=${p.id}" style="text-decoration:none;color:inherit">
-            <div class="product-name">${p.name}</div>
+        <div class="product-card">
+          <a href="product.html?id=${p.id}" style="text-decoration:none">
+            <div class="product-img-placeholder"><img src="${p.image}" alt="${p.name}" class="product-img"/></div>
           </a>
-          <div class="product-desc">${p.desc}</div>
-          <div class="product-footer">
-            <div class="product-price">€${p.price.toFixed(2)}</div>
-            <div class="card-actions">
-              <a href="product.html?id=${p.id}" class="btn-view">View</a>
-              <button class="btn-add" onclick="addToCart(${p.id})">+ Add</button>
+          <div class="product-body">
+            <div class="product-tags">
+              <span class="tag tag-category">${p.category}</span>
+              <span class="tag ${p.tagType}">${p.tag}</span>
+            </div>
+            <a href="product.html?id=${p.id}" style="text-decoration:none;color:inherit">
+              <div class="product-name">${p.name}</div>
+            </a>
+            <div class="product-desc">${p.desc}</div>
+            <div class="product-footer">
+              <div class="product-price">€${p.price.toFixed(2)}</div>
+              <div class="card-actions">
+                <a href="product.html?id=${p.id}" class="btn-view">View</a>
+                <button class="btn-add" onclick="addToCart(${p.id})">+ Add</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    `).join('');
+      `).join('');
     }
 
-    // Filters
     document.querySelectorAll('.filter-chip').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));

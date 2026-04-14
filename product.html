@@ -130,6 +130,7 @@
       background: var(--surface);
     }
 
+    /* small → scale */
     .nav-cart {
       display: flex;
       align-items: center;
@@ -142,13 +143,18 @@
       text-decoration: none;
       font-size: 0.875rem;
       font-weight: 500;
-      transition: border-color 0.2s, background 0.2s;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
       justify-self: end;
     }
 
     .nav-cart:hover {
       border-color: var(--border-accent);
       background: var(--accent-glow);
+      transform: scale(1.06);
+    }
+
+    .nav-cart:active {
+      transform: scale(0.94);
     }
 
     .cart-badge {
@@ -166,7 +172,6 @@
       display: inline;
     }
 
-    /* BREADCRUMB */
     .breadcrumb {
       max-width: 1100px;
       margin: 0 auto;
@@ -194,7 +199,6 @@
       color: var(--text2);
     }
 
-    /* PRODUCT PAGE LAYOUT */
     .product-page {
       max-width: 1100px;
       margin: 0 auto;
@@ -206,7 +210,6 @@
       z-index: 1;
     }
 
-    /* LEFT */
     .product-visual {
       display: flex;
       flex-direction: column;
@@ -247,7 +250,6 @@
       opacity: 0.5;
     }
 
-    /* DETAILS */
     .product-details {
       background: var(--bg2);
       border: 1px solid var(--border);
@@ -324,7 +326,6 @@
       color: var(--text3);
     }
 
-    /* QTY */
     .qty-row {
       display: flex;
       align-items: center;
@@ -348,6 +349,7 @@
       overflow: hidden;
     }
 
+    /* small → scale */
     .qty-btn {
       background: var(--surface);
       border: none;
@@ -356,12 +358,25 @@
       height: 36px;
       font-size: 1.125rem;
       cursor: pointer;
-      transition: background 0.15s;
       font-family: 'DM Mono', monospace;
+      transition: background 0.15s, transform 0.12s;
+    }
+
+    #qty-minus {
+      transform-origin: left center;
+    }
+
+    #qty-plus {
+      transform-origin: right center;
     }
 
     .qty-btn:hover {
-      background: var(--surface-hover, rgba(255, 255, 255, 0.08));
+      background: rgba(255, 255, 255, 0.08);
+      transform: scaleX(1.05);
+    }
+
+    .qty-btn:active {
+      transform: scaleX(0.95);
     }
 
     .qty-input {
@@ -383,6 +398,7 @@
       -webkit-appearance: none;
     }
 
+    /* large → press down */
     .btn-add-cart {
       width: 100%;
       background: var(--accent);
@@ -394,7 +410,7 @@
       border-radius: 10px;
       border: none;
       cursor: pointer;
-      transition: opacity 0.2s, transform 0.15s;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.15s;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -403,14 +419,18 @@
     }
 
     .btn-add-cart:hover {
-      opacity: 0.88;
-      transform: translateY(-1px);
+      opacity: 0.92;
+      transform: translateY(2px);
+      box-shadow: 0 2px 10px rgba(0, 212, 255, 0.3);
     }
 
     .btn-add-cart:active {
-      transform: translateY(0);
+      transform: translateY(4px);
+      box-shadow: none;
+      opacity: 1;
     }
 
+    /* large → press down */
     .btn-view-cart {
       width: 100%;
       background: transparent;
@@ -422,7 +442,7 @@
       border-radius: 10px;
       border: 1px solid var(--border);
       cursor: pointer;
-      transition: color 0.2s, border-color 0.2s;
+      transition: color 0.2s, border-color 0.2s, transform 0.15s;
       text-decoration: none;
       display: flex;
       align-items: center;
@@ -433,9 +453,13 @@
     .btn-view-cart:hover {
       color: var(--text);
       border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(2px);
     }
 
-    /* FEATURES */
+    .btn-view-cart:active {
+      transform: translateY(4px);
+    }
+
     .features-divider {
       height: 1px;
       background: var(--border);
@@ -469,7 +493,6 @@
       color: var(--green);
     }
 
-    /* DESCRIPTION */
     .product-info {
       margin-top: 2rem;
     }
@@ -551,7 +574,6 @@
       font-size: 0.8rem;
     }
 
-    /* SIMILAR */
     .similar-section {
       max-width: 1100px;
       margin: 0 auto;
@@ -878,23 +900,18 @@
     <div class="product-visual">
       <div class="main-image"><img src="${product.image}" alt="${product.name}"/></div>
       <div class="accent-line"></div>
-
       <div class="product-info">
         <div class="info-tabs">
           <button class="info-tab active" data-tab="description" onclick="switchTab('description')">Description</button>
           <button class="info-tab" data-tab="specs" onclick="switchTab('specs')">Specifications</button>
         </div>
-
         <div class="info-panel active" id="panel-description">
           <h3>About ${product.name}</h3>
           <p>${product.longDesc}</p>
         </div>
-
         <div class="info-panel" id="panel-specs">
           <h3>Product Specifications</h3>
-          <table class="spec-table">
-            <tbody>${specsRows}</tbody>
-          </table>
+          <table class="spec-table"><tbody>${specsRows}</tbody></table>
         </div>
       </div>
     </div>
@@ -904,36 +921,29 @@
         <span class="tag tag-category">${product.category}</span>
         <span class="tag tag-status-ok">${product.tag}</span>
       </div>
-
       <h1 class="product-title">${product.name}</h1>
       <p class="product-short-desc">${product.desc}</p>
-
       <div class="price-block">
         <div class="price-main">€${product.price.toFixed(2)}</div>
         <div class="price-note">Instant delivery · Secure checkout</div>
       </div>
-
       <div class="qty-row">
         <span class="qty-label">Quantity</span>
         <div class="qty-control">
-          <button class="qty-btn" onclick="changeQty(-1)">−</button>
+          <button class="qty-btn" id="qty-minus" onclick="changeQty(-1)">−</button>
           <input type="number" class="qty-input" id="qty" value="1" min="1" max="99"/>
-          <button class="qty-btn" onclick="changeQty(1)">+</button>
+          <button class="qty-btn" id="qty-plus" onclick="changeQty(1)">+</button>
         </div>
       </div>
-
       <button class="btn-add-cart" onclick="handleAddCart()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.58h9.72a2 2 0 0 0 2-1.57l1.38-7.39H5.12"/></svg>
         Add to Cart
       </button>
-
       <a href="shoppingcart.html" class="btn-view-cart">
         View Cart
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
-
       <div class="features-divider"></div>
-
       <ul class="features-list">
         ${product.features.map(f => `
           <li>
@@ -945,7 +955,6 @@
     </div>
   `;
 
-    // Similar products
     const similar = PRODUCTS.filter(p => p.id !== productId && p.category === product.category).slice(0, 4);
     document.getElementById('similar-grid').innerHTML = similar.map(p => `
     <a href="product.html?id=${p.id}" class="sim-card">
